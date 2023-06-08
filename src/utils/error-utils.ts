@@ -29,6 +29,18 @@ export class BadRequestError extends GenericError {
   }
 }
 
+export class DatabaseError extends GenericError {
+  static statusCode: number = 500;
+  public statusCode: number = DatabaseError.statusCode;
+  public name: string = 'DatabaseError';
+
+  constructor(
+    message: string = 'An error occurred while accessing the database.',
+  ) {
+    super(message);
+  }
+}
+
 export class ForbiddenError extends GenericError {
   static statusCode: number = 403;
   public statusCode: number = ForbiddenError.statusCode;

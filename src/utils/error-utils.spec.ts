@@ -1,5 +1,6 @@
 import {
   BadRequestError,
+  DatabaseError,
   ForbiddenError,
   GenericError,
   InternalServerError,
@@ -79,6 +80,45 @@ describe('Error utilities', () => {
       const expectedJson = {
         statusCode: BadRequestError.statusCode,
         name: 'BadRequestError',
+        message: errorMessage,
+      };
+      expect(error.toJSON()).toEqual(expectedJson);
+    });
+  });
+
+  describe('DatabaseError', () => {
+    it('should be an instance of Error and GenericError', () => {
+      const error = new DatabaseError();
+      expect(error instanceof Error).toBe(true);
+      expect(error instanceof GenericError).toBe(true);
+    });
+
+    it('should set the default message and name correctly', () => {
+      const error = new DatabaseError();
+      expect(error.message).toBe(
+        'An error occurred while accessing the database.',
+      );
+      expect(error.name).toBe('DatabaseError');
+    });
+
+    it('should set the custom message correctly', () => {
+      const errorMessage = 'Custom error message';
+      const error = new DatabaseError(errorMessage);
+      expect(error.message).toBe(errorMessage);
+    });
+
+    it('should have the correct statusCode', () => {
+      const error = new DatabaseError();
+      expect(error.statusCode).toBe(500);
+      expect(DatabaseError.statusCode).toBe(500);
+    });
+
+    it('should return the correct JSON representation', () => {
+      const errorMessage = 'Error message';
+      const error = new DatabaseError(errorMessage);
+      const expectedJson = {
+        statusCode: DatabaseError.statusCode,
+        name: 'DatabaseError',
         message: errorMessage,
       };
       expect(error.toJSON()).toEqual(expectedJson);
