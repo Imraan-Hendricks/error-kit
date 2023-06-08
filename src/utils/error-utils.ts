@@ -1,5 +1,6 @@
 export class GenericError extends Error {
   static statusCode: number = 500;
+  public statusCode: number = GenericError.statusCode;
   public name: string = 'GenericError';
 
   constructor(message: string = 'An error occurred.') {
@@ -11,9 +12,19 @@ export class GenericError extends Error {
 
   toJSON() {
     return {
-      statusCode: GenericError.statusCode,
+      statusCode: this.statusCode,
       name: this.name,
       message: this.message,
     };
+  }
+}
+
+export class ForbiddenError extends GenericError {
+  static statusCode: number = 403;
+  public statusCode: number = ForbiddenError.statusCode;
+  public name: string = 'ForbiddenError';
+
+  constructor(message: string = 'Access forbidden.') {
+    super(message);
   }
 }
