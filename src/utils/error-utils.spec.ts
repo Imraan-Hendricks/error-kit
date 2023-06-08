@@ -3,6 +3,7 @@ import {
   ForbiddenError,
   GenericError,
   InternalServerError,
+  NoRecordError,
   ServiceUnavailableError,
   UnauthorizedError,
   ValidationError,
@@ -150,6 +151,43 @@ describe('Error utilities', () => {
       const expectedJson = {
         statusCode: InternalServerError.statusCode,
         name: 'InternalServerError',
+        message: errorMessage,
+      };
+      expect(error.toJSON()).toEqual(expectedJson);
+    });
+  });
+
+  describe('NoRecordError', () => {
+    it('should be an instance of Error and GenericError', () => {
+      const error = new NoRecordError();
+      expect(error instanceof Error).toBe(true);
+      expect(error instanceof GenericError).toBe(true);
+    });
+
+    it('should set the default message and name correctly', () => {
+      const error = new NoRecordError();
+      expect(error.message).toBe('The requested record does not exist.');
+      expect(error.name).toBe('NoRecordError');
+    });
+
+    it('should set the custom message correctly', () => {
+      const errorMessage = 'Custom error message';
+      const error = new NoRecordError(errorMessage);
+      expect(error.message).toBe(errorMessage);
+    });
+
+    it('should have the correct statusCode', () => {
+      const error = new NoRecordError();
+      expect(error.statusCode).toBe(404);
+      expect(NoRecordError.statusCode).toBe(404);
+    });
+
+    it('should return the correct JSON representation', () => {
+      const errorMessage = 'Error message';
+      const error = new NoRecordError(errorMessage);
+      const expectedJson = {
+        statusCode: NoRecordError.statusCode,
+        name: 'NoRecordError',
         message: errorMessage,
       };
       expect(error.toJSON()).toEqual(expectedJson);

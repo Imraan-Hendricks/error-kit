@@ -49,6 +49,16 @@ export class InternalServerError extends GenericError {
   }
 }
 
+export class NoRecordError extends GenericError {
+  static statusCode: number = 404;
+  public statusCode: number = NoRecordError.statusCode;
+  public name: string = 'NoRecordError';
+
+  constructor(message: string = 'The requested record does not exist.') {
+    super(message);
+  }
+}
+
 export class ServiceUnavailableError extends GenericError {
   static statusCode: number = 503;
   public statusCode: number = ServiceUnavailableError.statusCode;
