@@ -19,6 +19,16 @@ export class GenericError extends Error {
   }
 }
 
+export class BadRequestError extends GenericError {
+  static statusCode: number = 400;
+  public statusCode: number = BadRequestError.statusCode;
+  public name: string = 'BadRequestError';
+
+  constructor(message: string = 'The request contains invalid data.') {
+    super(message);
+  }
+}
+
 export class ForbiddenError extends GenericError {
   static statusCode: number = 403;
   public statusCode: number = ForbiddenError.statusCode;
