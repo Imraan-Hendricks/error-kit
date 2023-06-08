@@ -3,6 +3,7 @@ import {
   ForbiddenError,
   GenericError,
   InternalServerError,
+  UnauthorizedError,
   ValidationError,
 } from './error-utils';
 
@@ -148,6 +149,43 @@ describe('Error utilities', () => {
       const expectedJson = {
         statusCode: InternalServerError.statusCode,
         name: 'InternalServerError',
+        message: errorMessage,
+      };
+      expect(error.toJSON()).toEqual(expectedJson);
+    });
+  });
+
+  describe('UnauthorizedError', () => {
+    it('should be an instance of Error and GenericError', () => {
+      const error = new UnauthorizedError();
+      expect(error instanceof Error).toBe(true);
+      expect(error instanceof GenericError).toBe(true);
+    });
+
+    it('should set the default message and name correctly', () => {
+      const error = new UnauthorizedError();
+      expect(error.message).toBe('Access denied. Authorization required.');
+      expect(error.name).toBe('UnauthorizedError');
+    });
+
+    it('should set the custom message correctly', () => {
+      const errorMessage = 'Custom error message';
+      const error = new UnauthorizedError(errorMessage);
+      expect(error.message).toBe(errorMessage);
+    });
+
+    it('should have the correct statusCode', () => {
+      const error = new UnauthorizedError();
+      expect(error.statusCode).toBe(401);
+      expect(UnauthorizedError.statusCode).toBe(401);
+    });
+
+    it('should return the correct JSON representation', () => {
+      const errorMessage = 'Error message';
+      const error = new UnauthorizedError(errorMessage);
+      const expectedJson = {
+        statusCode: UnauthorizedError.statusCode,
+        name: 'UnauthorizedError',
         message: errorMessage,
       };
       expect(error.toJSON()).toEqual(expectedJson);

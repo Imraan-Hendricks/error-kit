@@ -49,6 +49,16 @@ export class InternalServerError extends GenericError {
   }
 }
 
+export class UnauthorizedError extends GenericError {
+  static statusCode: number = 401;
+  public statusCode: number = UnauthorizedError.statusCode;
+  public name: string = 'UnauthorizedError';
+
+  constructor(message: string = 'Access denied. Authorization required.') {
+    super(message);
+  }
+}
+
 export class ValidationError<T> extends GenericError {
   static statusCode: number = 400;
   public statusCode: number = ValidationError.statusCode;
