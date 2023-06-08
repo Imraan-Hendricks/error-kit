@@ -4,6 +4,7 @@ import {
   GenericError,
   InternalServerError,
   NoRecordError,
+  NotAcceptableError,
   NotFoundError,
   ServiceUnavailableError,
   UnauthorizedError,
@@ -152,6 +153,45 @@ describe('Error utilities', () => {
       const expectedJson = {
         statusCode: InternalServerError.statusCode,
         name: 'InternalServerError',
+        message: errorMessage,
+      };
+      expect(error.toJSON()).toEqual(expectedJson);
+    });
+  });
+
+  describe('NotAcceptableError', () => {
+    it('should be an instance of Error and GenericError', () => {
+      const error = new NotAcceptableError();
+      expect(error instanceof Error).toBe(true);
+      expect(error instanceof GenericError).toBe(true);
+    });
+
+    it('should set the default message and name correctly', () => {
+      const error = new NotAcceptableError();
+      expect(error.message).toBe(
+        'The requested content type is not supported by the server.',
+      );
+      expect(error.name).toBe('NotAcceptableError');
+    });
+
+    it('should set the custom message correctly', () => {
+      const errorMessage = 'Custom error message';
+      const error = new NotAcceptableError(errorMessage);
+      expect(error.message).toBe(errorMessage);
+    });
+
+    it('should have the correct statusCode', () => {
+      const error = new NotAcceptableError();
+      expect(error.statusCode).toBe(406);
+      expect(NotAcceptableError.statusCode).toBe(406);
+    });
+
+    it('should return the correct JSON representation', () => {
+      const errorMessage = 'Error message';
+      const error = new NotAcceptableError(errorMessage);
+      const expectedJson = {
+        statusCode: NotAcceptableError.statusCode,
+        name: 'NotAcceptableError',
         message: errorMessage,
       };
       expect(error.toJSON()).toEqual(expectedJson);

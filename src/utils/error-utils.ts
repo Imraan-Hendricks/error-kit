@@ -49,6 +49,18 @@ export class InternalServerError extends GenericError {
   }
 }
 
+export class NotAcceptableError extends GenericError {
+  static statusCode: number = 406;
+  public statusCode: number = NotAcceptableError.statusCode;
+  public name: string = 'NotAcceptableError';
+
+  constructor(
+    message: string = 'The requested content type is not supported by the server.',
+  ) {
+    super(message);
+  }
+}
+
 export class NotFoundError extends GenericError {
   static statusCode: number = 404;
   public statusCode: number = NotFoundError.statusCode;
