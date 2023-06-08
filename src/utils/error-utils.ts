@@ -49,6 +49,18 @@ export class InternalServerError extends GenericError {
   }
 }
 
+export class ServiceUnavailableError extends GenericError {
+  static statusCode: number = 503;
+  public statusCode: number = ServiceUnavailableError.statusCode;
+  public name: string = 'ServiceUnavailableError';
+
+  constructor(
+    message: string = 'Service is currently unavailable. Please try again later.',
+  ) {
+    super(message);
+  }
+}
+
 export class UnauthorizedError extends GenericError {
   static statusCode: number = 401;
   public statusCode: number = UnauthorizedError.statusCode;

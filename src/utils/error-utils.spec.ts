@@ -3,6 +3,7 @@ import {
   ForbiddenError,
   GenericError,
   InternalServerError,
+  ServiceUnavailableError,
   UnauthorizedError,
   ValidationError,
 } from './error-utils';
@@ -149,6 +150,45 @@ describe('Error utilities', () => {
       const expectedJson = {
         statusCode: InternalServerError.statusCode,
         name: 'InternalServerError',
+        message: errorMessage,
+      };
+      expect(error.toJSON()).toEqual(expectedJson);
+    });
+  });
+
+  describe('ServiceUnavailableError', () => {
+    it('should be an instance of Error and GenericError', () => {
+      const error = new ServiceUnavailableError();
+      expect(error instanceof Error).toBe(true);
+      expect(error instanceof GenericError).toBe(true);
+    });
+
+    it('should set the default message and name correctly', () => {
+      const error = new ServiceUnavailableError();
+      expect(error.message).toBe(
+        'Service is currently unavailable. Please try again later.',
+      );
+      expect(error.name).toBe('ServiceUnavailableError');
+    });
+
+    it('should set the custom message correctly', () => {
+      const errorMessage = 'Custom error message';
+      const error = new ServiceUnavailableError(errorMessage);
+      expect(error.message).toBe(errorMessage);
+    });
+
+    it('should have the correct statusCode', () => {
+      const error = new ServiceUnavailableError();
+      expect(error.statusCode).toBe(503);
+      expect(ServiceUnavailableError.statusCode).toBe(503);
+    });
+
+    it('should return the correct JSON representation', () => {
+      const errorMessage = 'Error message';
+      const error = new ServiceUnavailableError(errorMessage);
+      const expectedJson = {
+        statusCode: ServiceUnavailableError.statusCode,
+        name: 'ServiceUnavailableError',
         message: errorMessage,
       };
       expect(error.toJSON()).toEqual(expectedJson);
