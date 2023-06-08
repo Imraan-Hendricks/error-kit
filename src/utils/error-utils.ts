@@ -49,6 +49,16 @@ export class InternalServerError extends GenericError {
   }
 }
 
+export class NotFoundError extends GenericError {
+  static statusCode: number = 404;
+  public statusCode: number = NotFoundError.statusCode;
+  public name: string = 'NotFoundError';
+
+  constructor(message: string = 'The requested resource was not found.') {
+    super(message);
+  }
+}
+
 export class NoRecordError extends GenericError {
   static statusCode: number = 404;
   public statusCode: number = NoRecordError.statusCode;

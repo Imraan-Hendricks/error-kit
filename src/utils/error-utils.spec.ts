@@ -4,6 +4,7 @@ import {
   GenericError,
   InternalServerError,
   NoRecordError,
+  NotFoundError,
   ServiceUnavailableError,
   UnauthorizedError,
   ValidationError,
@@ -151,6 +152,43 @@ describe('Error utilities', () => {
       const expectedJson = {
         statusCode: InternalServerError.statusCode,
         name: 'InternalServerError',
+        message: errorMessage,
+      };
+      expect(error.toJSON()).toEqual(expectedJson);
+    });
+  });
+
+  describe('NotFoundError', () => {
+    it('should be an instance of Error and GenericError', () => {
+      const error = new NotFoundError();
+      expect(error instanceof Error).toBe(true);
+      expect(error instanceof GenericError).toBe(true);
+    });
+
+    it('should set the default message and name correctly', () => {
+      const error = new NotFoundError();
+      expect(error.message).toBe('The requested resource was not found.');
+      expect(error.name).toBe('NotFoundError');
+    });
+
+    it('should set the custom message correctly', () => {
+      const errorMessage = 'Custom error message';
+      const error = new NotFoundError(errorMessage);
+      expect(error.message).toBe(errorMessage);
+    });
+
+    it('should have the correct statusCode', () => {
+      const error = new NotFoundError();
+      expect(error.statusCode).toBe(404);
+      expect(NotFoundError.statusCode).toBe(404);
+    });
+
+    it('should return the correct JSON representation', () => {
+      const errorMessage = 'Error message';
+      const error = new NotFoundError(errorMessage);
+      const expectedJson = {
+        statusCode: NotFoundError.statusCode,
+        name: 'NotFoundError',
         message: errorMessage,
       };
       expect(error.toJSON()).toEqual(expectedJson);
