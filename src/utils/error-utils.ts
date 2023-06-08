@@ -38,3 +38,37 @@ export class ForbiddenError extends GenericError {
     super(message);
   }
 }
+
+export class InternalServerError extends GenericError {
+  static statusCode: number = 500;
+  public statusCode: number = InternalServerError.statusCode;
+  public name: string = 'InternalServerError';
+
+  constructor(message: string = 'An unexpected error occurred on the server.') {
+    super(message);
+  }
+}
+
+export class ValidationError<T> extends GenericError {
+  static statusCode: number = 400;
+  public statusCode: number = ValidationError.statusCode;
+  public name: string = 'ValidationError';
+  public errors: T[];
+
+  constructor(
+    errors: T[],
+    message: string = 'The provided data does not meet the required criteria.',
+  ) {
+    super(message);
+    this.errors = errors;
+  }
+
+  toJSON() {
+    return {
+      statusCode: ValidationError.statusCode,
+      name: this.name,
+      message: this.message,
+      errors: this.errors,
+    };
+  }
+}

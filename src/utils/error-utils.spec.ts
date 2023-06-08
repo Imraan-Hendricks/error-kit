@@ -1,4 +1,10 @@
-import { BadRequestError, ForbiddenError, GenericError } from './error-utils';
+import {
+  BadRequestError,
+  ForbiddenError,
+  GenericError,
+  InternalServerError,
+  ValidationError,
+} from './error-utils';
 
 describe('Error utilities', () => {
   describe('GenericError', () => {
@@ -106,6 +112,90 @@ describe('Error utilities', () => {
         statusCode: ForbiddenError.statusCode,
         name: 'ForbiddenError',
         message: errorMessage,
+      };
+      expect(error.toJSON()).toEqual(expectedJson);
+    });
+  });
+
+  describe('InternalServerError', () => {
+    it('should be an instance of Error and GenericError', () => {
+      const error = new InternalServerError();
+      expect(error instanceof Error).toBe(true);
+      expect(error instanceof GenericError).toBe(true);
+    });
+
+    it('should set the default message and name correctly', () => {
+      const error = new InternalServerError();
+      expect(error.message).toBe('An unexpected error occurred on the server.');
+      expect(error.name).toBe('InternalServerError');
+    });
+
+    it('should set the custom message correctly', () => {
+      const errorMessage = 'Custom error message';
+      const error = new InternalServerError(errorMessage);
+      expect(error.message).toBe(errorMessage);
+    });
+
+    it('should have the correct statusCode', () => {
+      const error = new InternalServerError();
+      expect(error.statusCode).toBe(500);
+      expect(InternalServerError.statusCode).toBe(500);
+    });
+
+    it('should return the correct JSON representation', () => {
+      const errorMessage = 'Error message';
+      const error = new InternalServerError(errorMessage);
+      const expectedJson = {
+        statusCode: InternalServerError.statusCode,
+        name: 'InternalServerError',
+        message: errorMessage,
+      };
+      expect(error.toJSON()).toEqual(expectedJson);
+    });
+  });
+
+  describe('ValidationError', () => {
+    const errors = [{ name: 'customName', message: 'custom message' }];
+
+    it('should be an instance of Error and GenericError', () => {
+      const error = new ValidationError(errors);
+      expect(error instanceof Error).toBe(true);
+      expect(error instanceof GenericError).toBe(true);
+    });
+
+    it('should set the default message and name correctly', () => {
+      const error = new ValidationError(errors);
+      expect(error.message).toBe(
+        'The provided data does not meet the required criteria.',
+      );
+      expect(error.name).toBe('ValidationError');
+    });
+
+    it('should set the custom message correctly', () => {
+      const errorMessage = 'Custom error message';
+      const error = new ValidationError(errors, errorMessage);
+      expect(error.message).toBe(errorMessage);
+    });
+
+    it('should set the errors correctly', () => {
+      const error = new ValidationError(errors);
+      expect(error.errors).toEqual(errors);
+    });
+
+    it('should have the correct statusCode', () => {
+      const error = new ValidationError(errors);
+      expect(error.statusCode).toBe(400);
+      expect(ValidationError.statusCode).toBe(400);
+    });
+
+    it('should return the correct JSON representation', () => {
+      const errorMessage = 'Error message';
+      const error = new ValidationError(errors, errorMessage);
+      const expectedJson = {
+        statusCode: ValidationError.statusCode,
+        name: 'ValidationError',
+        message: errorMessage,
+        errors,
       };
       expect(error.toJSON()).toEqual(expectedJson);
     });
