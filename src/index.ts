@@ -1,3 +1,3 @@
-export function sum(a: number, b: number) {
-  return a + b;
-}
+import * as errors from './utils/error-utils';
+
+export default errors;
