@@ -6,13 +6,13 @@ Error Kit is an NPM package that provides a collection of common custom error cl
 
 Install the package using npm:
 
-```
+```shell
 npm install @imraan-hendricks/error-kit
 ```
 
 or with Yarn:
 
-```
+```shell
 yarn add @imraan-hendricks/error-kit
 ```
 
@@ -22,8 +22,7 @@ To use the custom error classes from Error Kit in your TypeScript/Node.js applic
 
 ### Example
 
-```
-
+```typescript
 import { ForbiddenError, NotFoundError } from '@imraan-hendricks/error-kit';
 
 try {
@@ -43,15 +42,20 @@ try {
     // Handle other types of errors
   }
 }
-
 ```
 
 ### Generic Error
 
 The GenericError class is a special class that extends the built-in Error class, serving as a base error class for both generic errors that do not fall into a specific category and other custom error classes. All custom error classes provided by Error Kit are instances of the GenericError class, ensuring consistent behavior and functionality.
 
-```
-import { GenericError, NotFoundError, ValidationError, InternalServerError, UnauthorizedError } from '@imraan-hendricks/error-kit';
+```typescript
+import {
+  GenericError,
+  NotFoundError,
+  ValidationError,
+  InternalServerError,
+  UnauthorizedError,
+} from '@imraan-hendricks/error-kit';
 
 const notFoundError = new NotFoundError('Resource not found.');
 const internalServerError = new InternalServerError('Internal server error.');
@@ -60,14 +64,13 @@ const unauthorizedError = new UnauthorizedError('Unauthorized access.');
 console.log(notFoundError instanceof GenericError); // true
 console.log(internalServerError instanceof GenericError); // true
 console.log(unauthorizedError instanceof GenericError); // true
-
 ```
 
 ### Validation Error
 
 The ValidationError class is a unique error class that allows you to pass a generic type parameter <T> to define the type of the errors value. It represents a validation error and includes an array of validation errors.
 
-```
+```typescript
 import { ValidationError } from '@imraan-hendricks/error-kit';
 
 // Define a custom type for validation errors
@@ -83,11 +86,13 @@ const validationErrors: MyValidationError[] = [
 ];
 
 // Create a new instance of ValidationError with the custom error type
-const validationError = new ValidationError<MyValidationError>(validationErrors, 'Validation failed.');
+const validationError = new ValidationError<MyValidationError>(
+  validationErrors,
+  'Validation failed.',
+);
 
 console.log(validationError.message);
 console.log(validationError.errors);
-
 ```
 
 By using TypeScript generics with the ValidationError class, you can customize the type of the errors value to match the specific structure and format of your validation errors.
@@ -96,7 +101,7 @@ By using TypeScript generics with the ValidationError class, you can customize t
 
 You can easily send custom errors as HTTP responses using the toJson() function and res.json() method provided by popular Node.js frameworks. The toJson() function converts the custom error object into a plain JavaScript object that can be serialized as JSON.
 
-```
+```typescript
 import express from 'express';
 import { NotFoundError } from '@imraan-hendricks/error-kit';
 
@@ -111,7 +116,6 @@ app.get('/not-found', (req, res) => {
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
 });
-
 ```
 
 ### Available Error Classes
